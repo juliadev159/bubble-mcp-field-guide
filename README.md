@@ -44,9 +44,15 @@ instead (create the folder if it does not exist).
 Then connect the Bubble MCP server as described in the
 [Bubble manual](https://manual.bubble.io/help-guides/ai/bubble-mcp); the skill's
 `references/setup-and-account.md` covers the connection and the account check. The
-skill loads on its own when you ask Claude Code to work on a Bubble app. If it does not
-load by itself (agents sometimes skip a skill for a request that looks small, such as a
-quick check), ask explicitly: "use the bubble-mcp-field-guide skill".
+skill does not connect the MCP; it tells the agent how to work with it.
+
+Claude Code can pick the skill up on its own, but in testing it often did not,
+especially for requests that look small, such as a quick check. To be sure it is used,
+name it at the start of your prompt:
+
+```text
+Use the bubble-mcp-field-guide skill. In my Bubble app [app name], [your task].
+```
 
 ## What's inside
 
