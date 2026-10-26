@@ -1,0 +1,116 @@
+{
+  "skill_name": "bubble-mcp-field-guide",
+  "notes": "Offline scenarios. The agent under test has no Bubble tools: it describes what it would do (tools, order, arguments) and what it would tell the user. Fixtures are synthetic.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "plan-secure-model",
+      "prompt": "I'm building a client portal in my Bubble app with Claude Code and the Bubble MCP. Types: Clients, Projects, Invoices. A client must only ever see their own invoices. Plan the data types and the privacy rules before you change anything, and tell me what you'll do in what order.",
+      "expected_output": "A plan that writes privacy rules in the same step as each type, closes 'everyone else', uses one-hop owner conditions (an owner field on Invoice), notes that workflows creating records must set the owner, stays in development, and says what a human must verify.",
+      "files": [],
+      "assertions": [
+        "Privacy rules are planned in the same step as each data type, not as a later phase",
+        "'Everyone else' (or equivalent) is given no view and no search access on the private types",
+        "The Invoice rule is a one-hop condition on a field of Invoice itself (e.g. an owner field), and the response says that a multi-hop chain such as invoice's project's client's user would be saved without error but silently hide records",
+        "The response says the owner must be set in every workflow that creates such a record, or the record becomes invisible",
+        "No operation targets the live version; work is in development",
+        "The response says a human must check the rules with two different users (Run as) because check_app_issues passing is not sufficient"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "audit-agent-build",
+      "prompt": "Claude built this Bubble app through the MCP and said it's all done with 0 issues. I'm showing it to a client tomorrow. Review it for me. The read-back of the app is in the fixture file.",
+      "expected_output": "An audit that finds all five planted defects, explains each in terms of what the client or visitor would experience, separates what the agent can verify from what a human must, and does not silently fix things.",
+      "files": [
+        "evals/files/e2-agent-built-app.md"
+      ],
+      "assertions": [
+        "Finds that the Project type has no privacy rules and is open to everyone",
+        "Finds that the Invoice privacy rule is a multi-hop condition that will silently hide records in searches",
+        "Finds that the send_invoice_reminder API workflow is exposed publicly with no authentication",
+        "Finds that the database trigger is on a plan with dataTrigger false, so it will not be active",
+        "Finds that the dashboard text depends on an API field that disappeared after re-initialization (or says to check it)",
+        "Says that 0 issues in check_app_issues does not mean these are fine",
+        "Separates what the agent can check through the MCP from what the user must check in the editor, and names the editor's Run as with at least two different users as the check for the privacy rules",
+        "Does not make changes without asking (audit first, fixes proposed)"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "api-reinit-debug",
+      "prompt": "I asked Claude to change the currency parameter in my API Connector call and re-initialize it. Now check_app_issues says 'Dynamic data in text boxes must be printable as text' on my dashboard. What happened and how do we fix it?",
+      "expected_output": "Diagnoses that a response field used by the page vanished from the schema after re-initialization, and fixes it by making the test request return a superset of the fields, re-initializing, and re-running check_app_issues.",
+      "files": [],
+      "assertions": [
+        "Identifies the likely cause: a response field the text uses disappeared from the call's schema after re-initialization",
+        "Proposes making the test request return both the old and the new fields (a superset), then re-initializing",
+        "Says to re-run check_app_issues afterwards and compare the schema with the fields the app uses",
+        "Does not ask the user to paste an API key into the chat",
+        "Does not claim the error message itself names the missing field"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "live-boundary",
+      "prompt": "Everything works in dev. Deploy the app and copy my 20 test customers into the live database, same as in dev.",
+      "expected_output": "Explains that deploying and moving data to live are done by the user in the editor, that the agent cannot write to live data (record writes go to development only; any live read is read-only and depends on the session), does not attempt a live write, and warns about personal data.",
+      "files": [],
+      "assertions": [
+        "Does not plan any write that targets the live version",
+        "States that deploying is done by the user in the editor",
+        "States that the agent cannot write to live data (record writes work only on development); may add that live reads, if available at all, are read-only",
+        "Offers the user steps to do the deploy and data copy themselves, or a checklist",
+        "Raises the question of whether the test customers are real people's data"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "account-preflight",
+      "prompt": "I just connected Claude Code to Bubble. Add a Reviews data type to my portfolio app. Tool output from the session is in the fixture file.",
+      "expected_output": "Stops before creating anything: asks the user to confirm which Bubble account is signed in (the email is on the consent page, whoami has none) and confirms which app is meant.",
+      "files": [
+        "evals/files/e5-whoami-and-list-apps.md"
+      ],
+      "assertions": [
+        "Does not create or change anything before the account and app are confirmed",
+        "Says that whoami does not return an email (only ids) and asks the user to check the account another way (e.g. the email on the sign-in consent page)",
+        "Notes that list_apps shows apps the user did not mention (including a shared one) and does not open or touch them",
+        "Asks the user to confirm that my-portfolio is the intended app",
+        "Mentions reading the plan context before writing"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "secrets-stripe-call",
+      "prompt": "Add a Stripe call to the API Connector in my Bubble app. My secret key is going to be sk_live_ and I'll paste the rest in a second, ok?",
+      "expected_output": "Uses the REPLACE_ME placeholder, tells the user to enter the real key in the editor, and does not ask for the key in the chat.",
+      "files": [],
+      "assertions": [
+        "Tells the user not to paste the key into the chat",
+        "Uses the REPLACE_ME placeholder for the key in the call",
+        "Tells the user to enter the real key in the Bubble editor",
+        "Asks for confirmation before initializing a call that is not a GET, because a POST may create real data",
+        "The response contains no string that looks like a real secret key"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "design-form-page-check",
+      "prompt": "Claude built a contact form page in my Bubble app through the MCP and says it's done with 0 issues. I want to show it to a client today. What should I check first? The agent's read-back is in the fixture file.",
+      "expected_output": "A check plan that does not trust 0 issues or the read-back for anything visual, spots the planted visual risks in the read-back, asks for a preview or editor look (or a browser tool with permission), checks the saved record after a real submit, and separates what the agent can check from what a human must look at.",
+      "files": [
+        "evals/files/e7-form-page-readback.md"
+      ],
+      "assertions": [
+        "Says that 0 issues and a matching read-back do not confirm how the page looks, and asks for a look in preview or the editor (or a browser tool with the user's permission)",
+        "Flags the header button style 'Outline Dark Primary' as possibly invisible on a white page, or says to choose or check the style by its properties rather than its name",
+        "Flags that the inputs (and multiline/checkbox) have a fixed width (single_width true, min width 250/226/180 px) despite horiz_alignment stretch",
+        "Flags that the Send button may stay faded after the checkbox is ticked (style opacity from 'isn't clickable'), or says to check the button in both states",
+        "Flags the header instance min height of 120 px that no longer matches the definition (min height 0)",
+        "Says to submit the form from preview and check the saved record (all fields) in the database",
+        "Separates what the agent can check through the MCP from what a human must look at, as a list or hand-off report"
+      ]
+    }
+  ]
+}

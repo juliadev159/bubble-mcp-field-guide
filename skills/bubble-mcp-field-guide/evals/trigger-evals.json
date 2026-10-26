@@ -1,0 +1,66 @@
+[
+  {
+    "query": "ok so I connected claude code to my bubble account yesterday and I want it to add a stripe webhook backend workflow to my invoicing app, its called client-billing. can you set that up via the mcp",
+    "should_trigger": true
+  },
+  {
+    "query": "claude just built my whole bubble app for a client over the mcp, 14 data types and a bunch of pages. before I show it tomorrow can you go through it and check the privacy rules and anything else it might have gotten wrong",
+    "should_trigger": true
+  },
+  {
+    "query": "why does my repeating group show nothing after the agent added privacy rules to my Order type in bubble? everything was fine before",
+    "should_trigger": true
+  },
+  {
+    "query": "I have two bubble accounts, a personal one and one for my agency. how do I connect claude code to both without them overwriting each other",
+    "should_trigger": true
+  },
+  {
+    "query": "my API connector field disappeared in bubble after claude re-initialized the call and now a text on my page throws an error about printable as text",
+    "should_trigger": true
+  },
+  {
+    "query": "seed the dev database of my bubble app with 30 realistic orders and some test customers, use the mcp. the app is shop-demo",
+    "should_trigger": true
+  },
+  {
+    "query": "can the bubble mcp deploy my changes to live or copy my dev data to the live database?",
+    "should_trigger": true
+  },
+  {
+    "query": "make the Invoice type in my Bubble app private so that only the owner can see it, and make sure the new API workflow isn't exposed",
+    "should_trigger": true
+  },
+  {
+    "query": "build a booking page in my Bubble app: a calendar, a form with name and email, and a repeating group showing the bookings. claude code is hooked up to bubble already",
+    "should_trigger": true
+  },
+  {
+    "query": "an agency built this Bubble app for us using AI and I have to decide whether to trust it. I've given you access through the Bubble MCP, what should you check first?",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm building a TUI in Go with Bubble Tea and Lip Gloss, how do I make a table with a spinner next to it",
+    "should_trigger": false
+  },
+  {
+    "query": "use Bubble's built-in AI agent in the editor to generate a landing page for my app, what prompt should I type there?",
+    "should_trigger": false
+  },
+  {
+    "query": "write a Bubble plugin element in JavaScript that renders a chart with Chart.js, I need the initialize and update functions",
+    "should_trigger": false
+  },
+  {
+    "query": "set up row level security policies in Supabase for my orders table via the supabase mcp so users only see their own orders",
+    "should_trigger": false
+  },
+  {
+    "query": "I need a node script that pulls all my Bubble users through the Data API every night and writes them into Postgres, I already have the API token set up in Bubble",
+    "should_trigger": false
+  },
+  {
+    "query": "how do I export my whole Bubble database to CSV before I leave the agency? I'm in the editor on the data tab right now",
+    "should_trigger": false
+  }
+]
