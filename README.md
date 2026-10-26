@@ -110,5 +110,5 @@ I'm Julia Tarasenko. I've built on Bubble since 2021, mostly the layer users don
 
 I take freelance projects and subcontract work for agencies, mostly the backend of Bubble apps that handle money or sensitive data.
 
-Write to me: [projects.julia@tarasen.co](mailto:projects.julia@tarasen.co?subject=Bubble%20MCP%20skill). Email works best: I work async, in writing.
+Write to me: [julia@tarasen.co](mailto:julia@tarasen.co?subject=Bubble%20MCP%20skill). Email works best: I work async, in writing.
 Case studies: [julia.tarasen.co](https://julia.tarasen.co) · [LinkedIn](https://www.linkedin.com/in/julia-tarasenko)
